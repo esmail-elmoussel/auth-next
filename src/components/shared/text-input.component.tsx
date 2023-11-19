@@ -5,7 +5,7 @@ interface Props {
   error?: string;
 }
 
-export default function TextInput({ inputProps, error }: Props) {
+export function TextInput({ inputProps, error }: Props) {
   return (
     <>
       <input

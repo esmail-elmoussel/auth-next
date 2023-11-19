@@ -1,6 +1,8 @@
 "use client";
 
-import TextInput from "@/components/shared/text-input.component";
+import { Button } from "@/components/shared/button.component";
+import { TextInput } from "@/components/shared/text-input.component";
+import { validatePassword } from "@/utils/validation.util";
 import { useForm } from "react-hook-form";
 
 interface RegisterForm {
@@ -26,7 +28,7 @@ export default function Register() {
         <div className="bg-grey-lighter min-h-screen flex flex-col">
           <div className="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
             <div className="bg-white px-6 py-8 rounded shadow-md text-black w-full">
-              <h1 className="mb-8 text-3xl text-center">Sign up</h1>
+              <h1 className="mb-8 text-3xl text-center">Register</h1>
 
               <TextInput
                 inputProps={{
@@ -62,6 +64,10 @@ export default function Register() {
                       value: 8,
                       message: "Password must be at least 8 characters long",
                     },
+                    maxLength: {
+                      value: 30,
+                      message: "Password is too long!",
+                    },
                     validate: (value) => {
                       const error = validatePassword(value);
 
@@ -89,12 +95,7 @@ export default function Register() {
                 error={errors.confirmPassword?.message}
               />
 
-              <button
-                type="submit"
-                className="w-full text-center py-3 rounded bg-black text-white hover:bg-slate-800 focus:outline-none mt-3"
-              >
-                Create Account
-              </button>
+              <Button type="submit">Create Account</Button>
             </div>
 
             <div className="text-grey-dark mt-6">

@@ -3,7 +3,7 @@
  * @param password
  * @returns an error string or null if no error found!
  */
-function validatePassword(password: string): string | null {
+export function validatePassword(password: string): string | null {
   const hasLetter = /[a-zA-Z]/.test(password);
   const hasNumber = /\d/.test(password);
   const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
