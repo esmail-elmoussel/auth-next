@@ -5,7 +5,7 @@ export interface User {
   password: string;
 }
 
-export interface RegisterForm {
+export interface RegisterFormFields {
   name: string;
   email: string;
   password: string;
