@@ -2,25 +2,30 @@
 
 import { Button } from "@/components/shared/button.component";
 import { TextInput } from "@/components/shared/text-input.component";
+import { useRegisterMutation } from "@/services/auth.service";
+import { RegisterForm } from "@/types/auth.types";
+import { FetchBaseQueryError } from "@/types/global.types";
 import { validatePassword } from "@/utils/validation.util";
 import { useForm } from "react-hook-form";
-
-interface RegisterForm {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
 
 export default function Register() {
   const {
     register,
     handleSubmit,
     getValues,
-    formState: { errors },
+    formState: { errors: validationErrors },
   } = useForm<RegisterForm>();
 
-  const onSubmit = (data: RegisterForm) => console.log(data);
+  const [registerMutation, { isLoading, error: registerError }] =
+    useRegisterMutation();
+
+  const onSubmit = (registerForm: RegisterForm) => {
+    registerMutation({
+      name: registerForm.name,
+      email: registerForm.email,
+      password: registerForm.password,
+    });
+  };
 
   return (
     <main>
@@ -36,7 +41,7 @@ export default function Register() {
                   placeholder: "Full Name",
                   ...register("name", { required: "Name is required!" }),
                 }}
-                error={errors.name?.message}
+                error={validationErrors.name?.message}
               />
 
               <TextInput
@@ -51,7 +56,7 @@ export default function Register() {
                     },
                   }),
                 }}
-                error={errors.email?.message}
+                error={validationErrors.email?.message}
               />
 
               <TextInput
@@ -75,7 +80,7 @@ export default function Register() {
                     },
                   }),
                 }}
-                error={errors.password?.message}
+                error={validationErrors.password?.message}
               />
 
               <TextInput
@@ -92,10 +97,19 @@ export default function Register() {
                     },
                   }),
                 }}
-                error={errors.confirmPassword?.message}
+                error={validationErrors.confirmPassword?.message}
               />
 
-              <Button type="submit">Create Account</Button>
+              {registerError && (
+                <span className="text-xs text-red-500">
+                  {(registerError as FetchBaseQueryError)?.data?.message ||
+                    "Something went wrong!"}
+                </span>
+              )}
+
+              <Button type="submit">
+                {isLoading ? "Loading..." : "Create Account"}
+              </Button>
             </div>
 
             <div className="text-grey-dark mt-6">
