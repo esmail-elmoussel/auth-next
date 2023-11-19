@@ -5,8 +5,8 @@ import { TextInput } from "@/components/shared/text-input.component";
 import { useLoginMutation } from "@/services/auth.service";
 import { LoginFormFields, RegisterFormFields } from "@/types/auth.types";
 import { FetchBaseQueryError } from "@/types/global.types";
-import { validatePassword } from "@/utils/validation.util";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 export function LoginForm() {
   const {
@@ -15,13 +15,26 @@ export function LoginForm() {
     formState: { errors: validationErrors },
   } = useForm<RegisterFormFields>();
 
-  const [loginMutation, { isLoading, error: loginError }] = useLoginMutation();
+  const [loginMutation, { isLoading }] = useLoginMutation();
 
-  const onSubmit = (loginFormFields: LoginFormFields) => {
-    loginMutation({
+  const onSubmit = async (loginFormFields: LoginFormFields) => {
+    toast.loading("Loading...");
+
+    const res = await loginMutation({
       email: loginFormFields.email,
       password: loginFormFields.password,
     });
+
+    toast.dismiss();
+
+    if ("error" in res) {
+      return toast.error(
+        (res.error as FetchBaseQueryError)?.data?.message ||
+          "Something went wrong!"
+      );
+    }
+
+    toast.success("Welcome Back!", { duration: 5000 });
   };
 
   return (
@@ -47,33 +60,13 @@ export function LoginForm() {
           placeholder: "Password",
           ...register("password", {
             required: "Password is required!",
-            minLength: {
-              value: 8,
-              message: "Password must be at least 8 characters long",
-            },
-            maxLength: {
-              value: 30,
-              message: "Password is too long!",
-            },
-            validate: (value) => {
-              const error = validatePassword(value);
-
-              return error || true;
-            },
           }),
         }}
         error={validationErrors.password?.message}
       />
 
-      {loginError && (
-        <span className="text-xs text-red-500">
-          {(loginError as FetchBaseQueryError)?.data?.message ||
-            "Something went wrong!"}
-        </span>
-      )}
-
-      <Button type="submit">
-        {isLoading ? "Loading..." : "Create Account"}
+      <Button type="submit" disabled={isLoading}>
+        Login
       </Button>
     </form>
   );

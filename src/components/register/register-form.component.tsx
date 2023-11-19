@@ -7,6 +7,7 @@ import { RegisterFormFields } from "@/types/auth.types";
 import { FetchBaseQueryError } from "@/types/global.types";
 import { validatePassword } from "@/utils/validation.util";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 export function RegisterForm() {
   const {
@@ -16,14 +17,28 @@ export function RegisterForm() {
     formState: { errors: validationErrors },
   } = useForm<RegisterFormFields>();
 
-  const [registerMutation, { isLoading, error: registerError }] =
-    useRegisterMutation();
+  const [registerMutation, { isLoading }] = useRegisterMutation();
 
-  const onSubmit = (registerFormFields: RegisterFormFields) => {
-    registerMutation({
+  const onSubmit = async (registerFormFields: RegisterFormFields) => {
+    toast.loading("Loading...");
+
+    const res = await registerMutation({
       name: registerFormFields.name,
       email: registerFormFields.email,
       password: registerFormFields.password,
+    });
+
+    toast.dismiss();
+
+    if ("error" in res) {
+      return toast.error(
+        (res.error as FetchBaseQueryError)?.data?.message ||
+          "Something went wrong!"
+      );
+    }
+
+    toast.success("Your registration is complete. You can login now.", {
+      duration: 5000,
     });
   };
 
@@ -93,15 +108,8 @@ export function RegisterForm() {
         error={validationErrors.confirmPassword?.message}
       />
 
-      {registerError && (
-        <span className="text-xs text-red-500">
-          {(registerError as FetchBaseQueryError)?.data?.message ||
-            "Something went wrong!"}
-        </span>
-      )}
-
-      <Button type="submit">
-        {isLoading ? "Loading..." : "Create Account"}
+      <Button type="submit" disabled={isLoading}>
+        Create Account
       </Button>
     </form>
   );
