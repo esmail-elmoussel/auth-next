@@ -1,5 +1,10 @@
 // Need to use the React-specific entry point to import createApi
-import { RegisterDto, RegisterResponseDto } from "@/types/auth.types";
+import {
+  LoginDto,
+  LoginResponseDto,
+  RegisterDto,
+  RegisterResponseDto,
+} from "@/types/auth.types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const authApi = createApi({
@@ -13,9 +18,16 @@ export const authApi = createApi({
         body: registerDto,
       }),
     }),
+    login: builder.mutation<LoginResponseDto, LoginDto>({
+      query: (loginDto) => ({
+        url: "/login",
+        method: "post",
+        body: loginDto,
+      }),
+    }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useRegisterMutation } = authApi;
+export const { useRegisterMutation, useLoginMutation } = authApi;

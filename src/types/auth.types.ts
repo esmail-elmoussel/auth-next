@@ -20,6 +20,11 @@ export interface RegisterDto {
 
 export type RegisterResponseDto = User;
 
+export interface LoginFormFields {
+  email: string;
+  password: string;
+}
+
 export interface LoginDto {
   email: string;
   password: string;

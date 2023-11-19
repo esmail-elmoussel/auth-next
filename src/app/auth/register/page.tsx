@@ -17,7 +17,7 @@ export default function Register() {
               className="no-underline border-b border-blue text-blue"
               href="/auth/login"
             >
-              Log in
+              Login
             </a>
           </div>
         </div>
