@@ -1,16 +1,20 @@
-## Live preview
+# Authentication App Next
 
-App deployed using [Vercel](https://vercel.com/) and can be found [here](https://auth-next-gamma.vercel.app/)
+## Live Preview
 
-## Environment variables
+The application is deployed using [Vercel](https://vercel.com/) and can be accessed [here](https://auth-next-gamma.vercel.app/).
 
-| Key                  | Value  | example               | description              | required |
+## Environment Variables
+
+| Key                  | Value  | Example               | Description              | Required |
 | -------------------- | ------ | --------------------- | ------------------------ | -------- |
 | NEXT_PUBLIC_BASE_URL | string | http://localhost:4000 | Base URL for the backend | Yes      |
 
-## Running app locally
+## Running the App Locally
 
-All you need to do is running:
+Note: Make sure you create a `.env` file and add your own env variables.
+
+To run the application locally, run this command:
 
 ```bash
 yarn && yarn dev
