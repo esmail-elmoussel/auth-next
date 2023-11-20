@@ -6,10 +6,13 @@ import { useRegisterMutation } from "@/services/auth.service";
 import { RegisterFormFields } from "@/types/auth.types";
 import { FetchBaseQueryError } from "@/types/global.types";
 import { validatePassword } from "@/utils/validation.util";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 export function RegisterForm() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -40,6 +43,8 @@ export function RegisterForm() {
     toast.success("Your registration is complete. You can login now.", {
       duration: 5000,
     });
+
+    router.push("/auth/login");
   };
 
   return (

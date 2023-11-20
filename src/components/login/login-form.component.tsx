@@ -5,10 +5,13 @@ import { TextInput } from "@/components/shared/text-input.component";
 import { useLoginMutation } from "@/services/auth.service";
 import { LoginFormFields, RegisterFormFields } from "@/types/auth.types";
 import { FetchBaseQueryError } from "@/types/global.types";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 export function LoginForm() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -35,6 +38,8 @@ export function LoginForm() {
     }
 
     toast.success("Welcome Back!", { duration: 5000 });
+
+    router.push("/");
   };
 
   return (
